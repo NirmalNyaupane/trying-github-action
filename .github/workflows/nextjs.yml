@@ -1,4 +1,4 @@
-name: Build and deploy next js application 
+name: Build and deploy next js application
 
 on:
   push:
@@ -10,11 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.2.1
+        with:
+          host: ${{secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: ".next/**/*,package.json,package-lock.json"
+          target: "/var/www/your-nextjs-app"
+
+      - name: Install dependencies on EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /var/www/your-nextjs-app
+            npm install --production
+            pm2 restart app || pm2 start npm --name "app" -- start
