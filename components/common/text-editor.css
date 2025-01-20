@@ -1,0 +1,28 @@
+.tiptap{
+    min-height: 200px;
+  }
+  .tiptap :first-child {
+    margin-top: 0;
+  }
+  
+  /* List styles */
+  .tiptap ul,
+  .tiptap ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+  }
+  .tiptap ul {
+    list-style: disc;
+  }
+  .tiptap ol {
+    list-style: number;
+  }
+  .tiptap a {
+    color: blue;
+    text-decoration: underline;
+    text-align: left;
+  }
+  .tiptap li p {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
